@@ -1,8 +1,11 @@
 import logging
+from io import BytesIO
 
+import qrcode
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
@@ -31,6 +34,31 @@ def handle_short(request, short):
 def click_count(request, short):
     url = get_object_or_404(Url, short=short)
     return HttpResponse(url.clicks)
+
+
+def get_qr_code(request, short):
+    # Create a QR code object
+    url = f"{request.scheme}://{request.get_host()}{reverse_lazy("shortner:handle_short", kwargs={"short":short})}"
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=2,
+    )
+    # Add the URL to the QR code
+    qr.add_data(url)
+    qr.make(fit=True)
+
+    # Generate the QR code as an image
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    # Save the image to a BytesIO buffer
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    buffer.seek(0)
+
+    # Return the image as a response
+    return HttpResponse(buffer, content_type="image/png")
 
 
 @method_decorator(csrf_exempt, name="dispatch")

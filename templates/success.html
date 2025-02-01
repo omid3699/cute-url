@@ -34,7 +34,7 @@
       </div>
       <div class="flex-grow"></div>
       <img
-        src="#"
+        src="{% url 'shortner:get_qr' short=url.short %}"
         alt="QR Code for {{ url.short }}"
         class="w-24 h-24 rounded-lg shadow-sm"
         title="Scan me to visit the URL!"
