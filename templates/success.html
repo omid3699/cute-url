@@ -1,0 +1,44 @@
+<div class="space-y-4">
+  <div class="p-4 bg-green-100 rounded-lg animate-fade-in">
+    <div class="flex items-center justify-between gap-4 mb-3">
+      <div class="flex items-center gap-2">
+        <span class="font-medium">Your cute URL:</span>
+        <a
+          href="{% url 'shortner:handle_short' short=url.short %}"
+          target="_blank"
+          class="text-blue-600 hover:text-blue-800 underline"
+          id="short-url-{{ url.id }}"
+        >
+          {{ request.scheme }}://{{ request.get_host }}{% url 'shortner:handle_short' short=url.short %}
+        </a>
+      </div>
+      <button
+        onclick="copyToClipboard('{{ request.scheme }}://{{ request.get_host }}{% url 'shortner:handle_short' short=url.short %}', this)"
+        class="px-3 py-1 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-md transition-colors duration-200"
+        aria-label="Copy shortened URL"
+      >
+        Copy 📋
+      </button>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="text-sm text-gray-600">
+        <span>Clicks: </span>
+
+        <span
+          hx-get="{% url 'shortner:click_count' short=url.short %}"
+          hx-trigger="every 5s"
+          class="font-medium"
+        >
+          0
+        </span>
+      </div>
+      <div class="flex-grow"></div>
+      <img
+        src="#"
+        alt="QR Code for {{ url.short }}"
+        class="w-24 h-24 rounded-lg shadow-sm"
+        title="Scan me to visit the URL!"
+      />
+    </div>
+  </div>
+</div>
