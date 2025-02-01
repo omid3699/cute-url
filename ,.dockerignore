@@ -1,0 +1,24 @@
+# Ignore Python bytecode files
+__pycache__/
+*.py[cod]
+
+# Ignore Django migrations folder
+*/migrations/
+
+# Ignore database file
+db.sqlite3
+
+# Ignore virtual environments
+venv/
+.env/
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+
+# Ignore Dockerfile and docker-compose.yaml itself
+Dockerfile
+docker-compose.yml
+
+# Ignore node_modules (if you have a frontend with npm/yarn)
+node_modules/
